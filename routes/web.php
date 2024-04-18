@@ -5,9 +5,13 @@ use App\Models\Job;
 
 Route::get('/', fn () => view('home'));
 
-Route::get('/jobs', fn () => view('jobs', [
-    'jobs' => Job::all()
-]));
+Route::get('/jobs', function () {
+    $jobs = Job::with('employer')->simplePaginate(3);
+
+    return view('jobs', [
+        'jobs' => $jobs
+    ]);
+});
 
 Route::get('/jobs/{id}', function ($id) {
     $job = Job::find($id);
